@@ -1,2 +1,0 @@
-# Ytdy
-GitHub
