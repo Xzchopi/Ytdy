@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8" />
+<title>Промокоды</title>
+<style>
+  body {
+    font-family: Arial, sans-serif;
+    margin: 30px;
+  }
+  #createSection {
+    margin-top: 20px;
+    display: none;
+  }
+  #promoImage {
+    margin-top: 20px;
+    max-width: 300px;
+    display: none;
+    border: 2px solid #333;
+  }
+</style>
+</head>
+<body>
+
+<h2>Введите промокод:</h2>
+<input type="text" id="promoInput" placeholder="Введите промокод" />
+<button onclick="checkPromo()">Проверить</button>
+
+<div id="createSection">
+  <h3>Создать новый промокод</h3>
+  <input type="text" id="newPromo" placeholder="Новый промокод" />
+  <input type="text" id="imageURL" placeholder="URL картинки для промокода" />
+  <button onclick="addPromo()">Создать</button>
+  <p>Список созданных промокодов:</p>
+  <ul id="promoList"></ul>
+</div>
+
+<img id="promoImage" src="" alt="Промокод картинка" />
+
+<script>
+  const MASTER_CODE = "GGSOLO";
+  let promoCodes = {}; // ключ - промокод, значение - URL картинки
+
+  function checkPromo() {
+    const code = document.getElementById('promoInput').value.trim();
+    const createSection = document.getElementById('createSection');
+    const promoImage = document.getElementById('promoImage');
+
+    promoImage.style.display = 'none';
+
+    if (code.toUpperCase() === MASTER_CODE) {
+      createSection.style.display = 'block';
+      promoImage.src = '';
+    } else if (promoCodes.hasOwnProperty(code)) {
+      // Показываем картинку по промокоду
+      promoImage.src = promoCodes[code];
+      promoImage.style.display = 'block';
+      createSection.style.display = 'none';
+    } else {
+      alert('Неверный промокод');
+      createSection.style.display = 'none';
+    }
+  }
+
+  function addPromo() {
+    const newCodeInput = document.getElementById('newPromo');
+    const imageURLInput = document.getElementById('imageURL');
+    const promoList = document.getElementById('promoList');
+
+    const newCode = newCodeInput.value.trim();
+    const imageURL = imageURLInput.value.trim();
+
+    if (newCode === "" || imageURL === "") {
+      alert("Пожалуйста, заполните оба поля.");
+      return;
+    }
+    if (newCode.toUpperCase() === MASTER_CODE) {
+      alert("Нельзя использовать главный промокод.");
+      return;
+    }
+
+    promoCodes[newCode] = imageURL;
+
+    // Добавим в список
+    const li = document.createElement('li');
+    li.textContent = `${newCode} → ${imageURL}`;
+    promoList.appendChild(li);
+
+    newCodeInput.value = '';
+    imageURLInput.value = '';
+  }
+</script>
+
+</body>
+</html>
